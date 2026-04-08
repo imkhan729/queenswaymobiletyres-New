@@ -1,0 +1,27 @@
+# Queensway Mobile Tyres — robots.txt
+# https://www.queenswaymobiletyres.co.uk
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /*?gclid=
+Disallow: /*?utm_
+
+# Allow all major search engines full access
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+# Block AI scrapers that don't respect attribution (optional)
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+Sitemap: https://www.queenswaymobiletyres.co.uk/sitemap.xml
