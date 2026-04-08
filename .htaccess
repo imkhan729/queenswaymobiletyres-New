@@ -5,6 +5,7 @@
 
 Options -MultiViews
 RewriteEngine On
+DirectoryIndex index.html
 
 # -----------------------------------------
 # Force HTTPS (uncomment once SSL is active on Hostinger)
@@ -52,6 +53,26 @@ RewriteRule ^locations/hatfield/?$               /mobile-tyres-hatfield         
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.html [L]
+
+# -----------------------------------------
+# MIME types — CRITICAL: force correct types so ES modules load.
+# Hostinger / LiteSpeed sometimes serves .js with the wrong type,
+# which silently blocks module scripts and leaves the loader stuck.
+# -----------------------------------------
+<IfModule mod_mime.c>
+  RemoveType .js
+  RemoveType .mjs
+  RemoveType .css
+  AddType application/javascript          .js
+  AddType application/javascript          .mjs
+  AddType text/css                        .css
+  AddType image/webp                      .webp
+  AddType image/svg+xml                   .svg
+  AddType font/woff                       .woff
+  AddType font/woff2                      .woff2
+  AddType application/manifest+json       .webmanifest
+  AddType application/json                .json
+</IfModule>
 
 # -----------------------------------------
 # Compression (gzip / brotli if mod_deflate / mod_brotli enabled)
@@ -112,17 +133,6 @@ RewriteRule ^ index.html [L]
   Header set X-Frame-Options "SAMEORIGIN"
   Header set Referrer-Policy "strict-origin-when-cross-origin"
   Header set Permissions-Policy "camera=(), microphone=(), geolocation=(self)"
-</IfModule>
-
-# -----------------------------------------
-# MIME types — make sure modern formats are served correctly
-# -----------------------------------------
-<IfModule mod_mime.c>
-  AddType application/javascript          .mjs
-  AddType image/webp                      .webp
-  AddType image/svg+xml                   .svg
-  AddType font/woff2                      .woff2
-  AddType application/manifest+json       .webmanifest
 </IfModule>
 
 # -----------------------------------------

@@ -301,6 +301,26 @@
   <div id="initial-loader" aria-hidden="true">
     <div class="spinner"></div>
   </div>
+  <script>
+    // Bulletproof loader removal — fires even if React fails to mount,
+    // the module script errors, or the MIME type is wrong.
+    (function () {
+      function hideLoader() {
+        var l = document.getElementById('initial-loader');
+        if (!l) return;
+        l.classList.add('loaded');
+        setTimeout(function () { if (l && l.parentNode) l.parentNode.removeChild(l); }, 400);
+      }
+      // Hard safety timer — never leave the user stuck on a spinner.
+      setTimeout(hideLoader, 4000);
+      // Also hide once the window is fully loaded.
+      if (document.readyState === 'complete') {
+        hideLoader();
+      } else {
+        window.addEventListener('load', hideLoader);
+      }
+    })();
+  </script>
 </body>
 
 </html>
