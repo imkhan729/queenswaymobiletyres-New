@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"import pypdf; r=pypdf.PdfReader\\(r''''C:/Users/Roy/Downloads/seo-audit-queenswaymobiletyres-FIXED_1.pdf''''\\); print\\(''''Pages:'''', len\\(r.pages\\)\\); [print\\(f''''=== PAGE {i+1} ===\\\\n'''', p.extract_text\\(\\)\\) for i,p in enumerate\\(r.pages\\)]\")",
+      "Bash(python -c \"import PyPDF2; r=PyPDF2.PdfReader\\(r''''C:/Users/Roy/Downloads/seo-audit-queenswaymobiletyres-FIXED_1.pdf''''\\); print\\(''''Pages:'''', len\\(r.pages\\)\\)\")",
+      "Bash(python -m pip install pypdf --quiet)",
+      "Bash(python -c \":*)",
+      "Bash(\"C:/Users/Roy/Downloads/Queensway-Revamp/Queensway Claude Version/.tmp_seo_audit.txt\")",
+      "Bash(wc -l \"C:/Users/Roy/Downloads/Queensway-Revamp/Queensway Claude Version/client/src/pages/blog.tsx\" \"C:/Users/Roy/Downloads/Queensway-Revamp/Queensway Claude Version/client/src/pages/blog/\"*.tsx \"C:/Users/Roy/Downloads/Queensway-Revamp/Queensway Claude Version/client/src/pages/services/\"*.tsx)",
+      "Bash(find 'C:/Users/Roy/Downloads/Queensway-Revamp/Queensway Claude Version' -name *.webp -not -path */dist/*)",
+      "Read(//c/Users/Roy/Downloads/Queensway-Revamp/**)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(wc -l 'C:/Users/Roy/Downloads/Queensway-Revamp/Queensway Claude Version/client/src/pages/services/'*.tsx)",
+      "Bash(grep -A 3 \"<SEO\" client/src/pages/services/*.tsx)",
+      "Bash(grep -A 1 \"<h1\" client/src/pages/services/*.tsx)",
+      "Bash(for file:*)",
+      "Bash(do echo:*)",
+      "Read(//c/Users/Roy/Downloads/Queensway-Revamp/Queensway Claude Version/**)",
+      "Bash(done)",
+      "Bash(powershell -Command \"\\(Get-Content client/public/sitemap.xml -Raw\\) -replace ''2026-04-06'',''2026-04-07'' | Set-Content client/public/sitemap.xml -NoNewline\")",
+      "Bash(python .tmp/replace_slugs.py)",
+      "Bash(powershell -NoProfile -Command \"\\(Get-Content client\\\\public\\\\sitemap.xml -Raw\\) -replace ''2026-04-07'',''2026-04-08'' | Set-Content client\\\\public\\\\sitemap.xml -NoNewline\")",
+      "Bash(python .tmp/fix_nested_links.py)",
+      "Bash(gh auth:*)"
+    ]
+  }
+}

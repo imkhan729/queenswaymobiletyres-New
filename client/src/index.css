@@ -1,0 +1,69 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: 'Inter', sans-serif;
+  --font-heading: 'Oswald', sans-serif;
+
+  --color-background: hsl(220 15% 10%);
+  --color-foreground: hsl(220 10% 95%);
+  
+  --color-primary: hsl(35 95% 55%); /* Safety Orange/Amber */
+  --color-primary-foreground: hsl(220 15% 10%);
+  
+  --color-secondary: hsl(220 15% 16%);
+  --color-secondary-foreground: hsl(220 10% 95%);
+  
+  --color-muted: hsl(220 15% 20%);
+  --color-muted-foreground: hsl(220 10% 70%);
+  
+  --color-accent: hsl(220 15% 25%);
+  --color-accent-foreground: hsl(220 10% 95%);
+  
+  --color-card: hsl(220 15% 12%);
+  --color-card-foreground: hsl(220 10% 95%);
+  
+  --color-border: hsl(220 15% 20%);
+  --color-input: hsl(220 15% 20%);
+  
+  --radius-sm: 0.125rem;
+  --radius-md: 0.25rem;
+  --radius-lg: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased selection:bg-primary/30 selection:text-primary-foreground;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading uppercase tracking-wide;
+  }
+}
+
+@layer utilities {
+  .bg-tire-pattern {
+    background-image: radial-gradient(hsl(220 15% 14%) 15%, transparent 16%), radial-gradient(hsl(220 15% 14%) 15%, transparent 16%);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+  }
+  
+  .glass-card {
+    @apply bg-white/5 backdrop-blur-md border border-white/10 shadow-xl;
+  }
+  
+  .text-stroke {
+    -webkit-text-stroke: 1px rgba(255,255,255,0.1);
+    color: transparent;
+  }
+
+  .two-column-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem 1rem;
+  }
+}
