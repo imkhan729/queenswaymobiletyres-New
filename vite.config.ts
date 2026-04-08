@@ -39,29 +39,14 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
-    // Split large vendor libs out of the main chunk so first paint downloads
-    // less JS, and so switching routes doesn't re-download React/UI libs.
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (!id.includes("node_modules")) return;
-          if (id.includes("react-dom") || id.includes("/react/") || id.includes("scheduler") || id.includes("wouter")) {
-            return "vendor-react";
-          }
-          if (id.includes("@radix-ui") || id.includes("lucide-react") || id.includes("class-variance-authority") || id.includes("tailwind-merge") || id.includes("clsx")) {
-            return "vendor-ui";
-          }
-          if (id.includes("framer-motion")) {
-            return "vendor-motion";
-          }
-          if (id.includes("@tanstack")) {
-            return "vendor-query";
-          }
-          return "vendor";
-        },
-      },
-    },
-    chunkSizeWarningLimit: 800,
+    // IMPORTANT: do NOT split react / react-dom / scheduler / jsx-runtime
+    // across chunks. React 19 uses a shared `ReactSharedInternals` object,
+    // and splitting it produces two copies with different shapes, causing
+    // "Cannot set properties of undefined (setting 'Activity')" at runtime.
+    // We let Rollup choose chunking automatically for everything else —
+    // lazy routes already split via dynamic `import()`, which is enough.
+    rollupOptions: {},
+    chunkSizeWarningLimit: 1200,
   },
   server: {
     host: "0.0.0.0",
