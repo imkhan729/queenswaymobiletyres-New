@@ -1,8 +1,141 @@
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteBase /
-  RewriteRule ^index\.html$ - [L]
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule . /index.html [L]
+# ============================================================
+# Queensway Mobile Tyres — Hostinger shared hosting .htaccess
+# SPA rewrite + compression + long-term asset caching + HTTPS
+# ============================================================
+
+Options -MultiViews
+RewriteEngine On
+DirectoryIndex index.html
+
+# -----------------------------------------
+# Force HTTPS (uncomment once SSL is active on Hostinger)
+# -----------------------------------------
+# RewriteCond %{HTTPS} !=on
+# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# -----------------------------------------
+# Force non-www -> www (or reverse). Leave commented unless needed.
+# -----------------------------------------
+# RewriteCond %{HTTP_HOST} ^queenswaymobiletyres\.co\.uk$ [NC]
+# RewriteRule ^ https://www.queenswaymobiletyres.co.uk%{REQUEST_URI} [L,R=301]
+
+# -----------------------------------------
+# 301 redirects — legacy slugs to new SEO-descriptive slugs.
+# Mirrors the wouter <Redirect> table in App.tsx so search engines
+# see real 301s, not client-side rewrites.
+# -----------------------------------------
+RewriteRule ^mobile-tyre-fitting/?$              /mobile-tyre-fitting-hemel-hempstead      [R=301,L]
+RewriteRule ^emergency-call-out/?$               /24-hour-emergency-mobile-tyre-fitting    [R=301,L]
+RewriteRule ^puncture-repair/?$                  /mobile-puncture-repair-near-me           [R=301,L]
+RewriteRule ^battery-replacement/?$              /mobile-car-battery-replacement           [R=301,L]
+RewriteRule ^wheel-balancing/?$                  /mobile-wheel-balancing                   [R=301,L]
+RewriteRule ^emergency-fuel/?$                   /emergency-fuel-delivery                  [R=301,L]
+RewriteRule ^locking-nut-removal/?$              /locking-wheel-nut-removal                [R=301,L]
+RewriteRule ^locations/watford/?$                /mobile-tyres-watford                     [R=301,L]
+RewriteRule ^locations/st-albans/?$              /mobile-tyres-st-albans                   [R=301,L]
+RewriteRule ^locations/hemel-hempstead/?$        /mobile-tyres-hemel-hempstead             [R=301,L]
+RewriteRule ^locations/london/?$                 /mobile-tyres-london                      [R=301,L]
+RewriteRule ^locations/luton/?$                  /mobile-tyres-luton                       [R=301,L]
+RewriteRule ^locations/milton-keynes/?$          /mobile-tyres-milton-keynes               [R=301,L]
+RewriteRule ^locations/harrow/?$                 /mobile-tyres-harrow                      [R=301,L]
+RewriteRule ^locations/slough/?$                 /mobile-tyres-slough                      [R=301,L]
+RewriteRule ^locations/northampton/?$            /mobile-tyres-northampton                 [R=301,L]
+RewriteRule ^locations/stevenage/?$              /mobile-tyres-stevenage                   [R=301,L]
+RewriteRule ^locations/aylesbury/?$              /mobile-tyres-aylesbury                   [R=301,L]
+RewriteRule ^locations/high-wycombe/?$           /mobile-tyres-high-wycombe                [R=301,L]
+RewriteRule ^locations/welwyn-garden-city/?$     /mobile-tyres-welwyn-garden-city          [R=301,L]
+RewriteRule ^locations/hatfield/?$               /mobile-tyres-hatfield                    [R=301,L]
+
+# -----------------------------------------
+# SPA fallback — if the request is not a real file or directory,
+# serve index.html so wouter's client-side router can handle it.
+# -----------------------------------------
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [L]
+
+# -----------------------------------------
+# MIME types — CRITICAL: force correct types so ES modules load.
+# Hostinger / LiteSpeed sometimes serves .js with the wrong type,
+# which silently blocks module scripts and leaves the loader stuck.
+# -----------------------------------------
+<IfModule mod_mime.c>
+  RemoveType .js
+  RemoveType .mjs
+  RemoveType .css
+  AddType application/javascript          .js
+  AddType application/javascript          .mjs
+  AddType text/css                        .css
+  AddType image/webp                      .webp
+  AddType image/svg+xml                   .svg
+  AddType font/woff                       .woff
+  AddType font/woff2                      .woff2
+  AddType application/manifest+json       .webmanifest
+  AddType application/json                .json
 </IfModule>
+
+# -----------------------------------------
+# Compression (gzip / brotli if mod_deflate / mod_brotli enabled)
+# -----------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
+  AddOutputFilterByType DEFLATE application/javascript application/x-javascript application/json
+  AddOutputFilterByType DEFLATE application/xml application/rss+xml application/atom+xml
+  AddOutputFilterByType DEFLATE image/svg+xml font/woff font/woff2 application/font-woff application/font-woff2
+</IfModule>
+
+<IfModule mod_brotli.c>
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/plain text/xml text/css text/javascript
+  AddOutputFilterByType BROTLI_COMPRESS application/javascript application/json application/xml
+  AddOutputFilterByType BROTLI_COMPRESS image/svg+xml font/woff font/woff2
+</IfModule>
+
+# -----------------------------------------
+# Cache-Control — Vite emits hashed filenames in /assets/, so we can
+# cache those immutably for a year. HTML is short-lived so new deploys
+# are picked up immediately.
+# -----------------------------------------
+<IfModule mod_expires.c>
+  ExpiresActive On
+
+  ExpiresByType text/css                        "access plus 1 year"
+  ExpiresByType text/javascript                 "access plus 1 year"
+  ExpiresByType application/javascript          "access plus 1 year"
+  ExpiresByType image/webp                      "access plus 1 year"
+  ExpiresByType image/png                       "access plus 1 year"
+  ExpiresByType image/jpeg                      "access plus 1 year"
+  ExpiresByType image/svg+xml                   "access plus 1 year"
+  ExpiresByType image/x-icon                    "access plus 1 year"
+  ExpiresByType font/woff                       "access plus 1 year"
+  ExpiresByType font/woff2                      "access plus 1 year"
+
+  ExpiresByType text/html                       "access plus 0 seconds"
+  ExpiresByType application/xml                 "access plus 1 hour"
+  ExpiresByType text/xml                        "access plus 1 hour"
+  ExpiresByType text/plain                      "access plus 1 hour"
+</IfModule>
+
+<IfModule mod_headers.c>
+  # Long-term immutable caching for hashed assets
+  <FilesMatch "\.(js|css|woff2?|png|jpg|jpeg|webp|svg|ico)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # Never cache the HTML shell — we want new deploys to be picked up instantly
+  <FilesMatch "\.(html)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires 0
+  </FilesMatch>
+
+  # Basic security headers
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set Permissions-Policy "camera=(), microphone=(), geolocation=(self)"
+</IfModule>
+
+# -----------------------------------------
+# Custom 404 — falls through to SPA NotFound component
+# -----------------------------------------
+ErrorDocument 404 /index.html
